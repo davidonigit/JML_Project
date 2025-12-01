@@ -17,7 +17,7 @@ public class IterativeBinarySearch {
           @ decreases r - l + 1;
           @*/
         while (l <= r) {
-            k = (l + r) >>> 1;
+            k = l + (r - l) / 2;
 
             if (array[k] == key) {
                 return k;
