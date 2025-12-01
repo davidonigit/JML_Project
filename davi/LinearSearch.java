@@ -9,7 +9,7 @@ public class LinearSearch {
         
         /*@ loop_invariant 0 <= i && i <= array.length;
           @ loop_invariant (\forall int k; 0 <= k && k < i; array[k] != value);
-          @ decreasing array.length - i;
+          @ decreases array.length - i;
           @*/
         for (int i = 0; i < array.length; i++) {
             if (array[i] == value) {
