@@ -1,0 +1,21 @@
+public class LinearSearch {
+
+    /*@ public normal_behavior
+      @   requires array != null;
+      @   ensures \result != -1 ==> (0 <= \result && \result < array.length && array[\result] == value);
+      @   ensures \result == -1 ==> (\forall int k; 0 <= k && k < array.length; array[k] != value);
+      @*/
+    public /*@ pure @*/ int find(int[] array, int value) {
+        
+        /*@ loop_invariant 0 <= i && i <= array.length;
+          @ loop_invariant (\forall int k; 0 <= k && k < i; array[k] != value);
+          @ decreasing array.length - i;
+          @*/
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == value) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
