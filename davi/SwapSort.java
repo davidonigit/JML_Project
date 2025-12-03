@@ -1,3 +1,10 @@
+/**
+ * The idea of Swap-Sort is to count the number m of smaller values (that are in
+ * A) from each element of an array A(1...n) and then swap the element with the
+ * element in A(m+1). This ensures that the exchanged element is already in the
+ * correct, i.e. final, position. The disadvantage of this algorithm is that
+ * each element may only occur once, otherwise there is no termination.
+ */
 public class SwapSort {
 
     /*@ public normal_behavior

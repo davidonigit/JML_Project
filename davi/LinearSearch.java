@@ -1,3 +1,8 @@
+/**
+ * Linear search is the easiest search algorithm It works with sorted and
+ * unsorted arrays (an binary search works only with sorted array) This
+ * algorithm just compares all elements of an array to find a value
+ */
 public class LinearSearch {
 
     /*@ public normal_behavior

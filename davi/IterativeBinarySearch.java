@@ -1,3 +1,10 @@
+/**
+ * Binary search is one of the most popular algorithms This class represents
+ * iterative version {@link BinarySearch} Iterative binary search is likely to
+ * have lower constant factors because it doesn't involve the overhead of
+ * manipulating the call stack. But in java the recursive version can be
+ * optimized by the compiler to this version.
+ */
 public class IterativeBinarySearch {
 
     /*@ public normal_behavior
