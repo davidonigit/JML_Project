@@ -4,7 +4,6 @@
  * The buffer allows you to overwrite old data when the buffer is full and efficiently use limited memory.
  * When the buffer is full, adding a new item will overwrite the oldest data.
  */
-
 public class CircularBuffer {
     
     private /*@ spec_public @*/ int[] buffer;
@@ -14,16 +13,19 @@ public class CircularBuffer {
     private /*@ spec_public @*/ int capacity;
 
     /*@ 
+      @ public initially size == 0;
+      @ public initially readIndex == 0;
+      @ public initially writeIndex == 0;
       @ public invariant buffer != null;
       @ public invariant capacity > 0;
       @ public invariant buffer.length == capacity;
-      @ public invariant 0 <= size && size <= capacity;
-      @ public invariant 0 <= readIndex && readIndex < capacity;
-      @ public invariant 0 <= writeIndex && writeIndex < capacity;
+      @ public invariant 0 <= size <= capacity;
+      @ public invariant 0 <= readIndex < capacity;
+      @ public invariant 0 <= writeIndex < capacity;
       @*/
 
     /*@
-      @ requires cap > 0;
+      @ requires cap > 0 && cap < Integer.MAX_VALUE;
       @ ensures capacity == cap;
       @ ensures size == 0;
       @ ensures readIndex == 0;
@@ -47,44 +49,79 @@ public class CircularBuffer {
     }
 
     /*@
-      @ requires !isFull();
-      @ requires size < capacity; 
-      @ ensures size == \old(size) + 1;
-      @ ensures buffer[\old(writeIndex)] == element; 
-      @ assignable size, writeIndex, buffer[*];
+      @ public exceptional_behavior
+      @   requires element == 0;
+      @   assignable \nothing;
+      @   signals_only IllegalArgumentException;
+      @ 
+      @ also
+      @
+      @ public normal_behavior    
+      @   requires size < capacity;
+      @   requires element != 0;
+      @   assignable size, writeIndex, buffer[*];
+      @   ensures size == \old(size) + 1;
+      @   ensures buffer[\old(writeIndex)] == element;
+      @   ensures writeIndex == (\old(writeIndex) + 1) % capacity;
+      @   ensures readIndex == \old(readIndex);
+      @
+      @ also
+      @
+      @ public normal_behavior  
+      @   requires size == capacity;
+      @   requires element != 0;
+      @   assignable readIndex, writeIndex, buffer[*];
+      @   ensures size == capacity;
+      @   ensures buffer[\old(writeIndex)] == element;
+      @   ensures writeIndex == (\old(writeIndex) + 1) % capacity;
+      @   ensures readIndex == (\old(readIndex) + 1) % capacity;
       @*/
-    public void insert(int element) {
-        buffer[writeIndex] = element;
-        
-        int nextIndex = writeIndex + 1;
-        if (nextIndex >= capacity) {
-            writeIndex = 0;
-        } else {
-            writeIndex = nextIndex;
+    public void put(int element) {    
+        if (element == 0){
+            throw new IllegalArgumentException("Elemento 0 nao e permitido");
         }
-        
-        size++;
+        if (size < capacity) {
+            buffer[writeIndex] = element;
+
+            writeIndex = (writeIndex + 1) % capacity;
+            
+            size++;
+        } else {
+            buffer[writeIndex] = element;
+            
+            writeIndex = (writeIndex + 1) % capacity;
+            readIndex = (readIndex + 1) % capacity;
+        }
     }
 
     /*@
-      @ requires !isEmpty();
-      @ requires size > 0;
-      @ ensures size == \old(size) - 1;
-      @ ensures \result == buffer[\old(readIndex)];
-      @ assignable size, readIndex;
+      @ public normal_behavior
+      @   requires size == 0;
+      @   assignable \nothing;
+      @   ensures \result == 0;
+      @
+      @ also
+      @
+      @ public normal_behavior
+      @   requires size > 0;
+      @   assignable size, readIndex, buffer[*];
+      @   ensures size == \old(size) - 1;
+      @   ensures \result == \old(buffer[readIndex]);
+      @   ensures buffer[\old(readIndex)] == 0;
+      @   ensures readIndex == (\old(readIndex) + 1) % capacity;
       @*/
-    public int remove() {
-        int element = buffer[readIndex];
-        
-        int nextIndex = readIndex + 1;
-        if (nextIndex >= capacity) {
-            readIndex = 0;
+    public int get() {
+        if (size == 0) {
+            return 0;
         } else {
-            readIndex = nextIndex;
+            int element = buffer[readIndex];
+            buffer[readIndex] = 0;
+            
+            readIndex = (readIndex + 1) % capacity;
+            
+            size--;
+            return element;
         }
-
-        size--;
-        return element;
     }
 
     public /*@ pure @*/ int getSize() {
