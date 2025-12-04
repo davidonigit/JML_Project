@@ -9,7 +9,7 @@ public class SwapSort {
 
     /*@ public normal_behavior
       @   requires array != null;
-      @   requires (\forall int i, j; 0 <= i && i < j && j < array.length; array[i] != array[j]);
+      @   requires (\forall int i, j; 0 <= i < j < array.length; array[i] != array[j]);
       @   assignable array[*];
       @*/
     public void sort(int[] array) {
@@ -37,7 +37,7 @@ public class SwapSort {
     /*@ private normal_behavior
       @   requires array != null;
       @   requires 0 <= index < array.length;
-      @   ensures 0 <= \result <= (array.length - 1 - index);
+      @   ensures 0 <= \result <= (array.length - (index + 1));
       @*/
     private /*@ pure helper @*/ int getSmallerElementCount(int[] array, int index) {
         int counter = 0;
