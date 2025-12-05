@@ -106,29 +106,6 @@ public class CircleLinkedList<E> {
         size++;
     }
 
-//     /**
-//      * Returns a string representation of the list in the format "[ element1, element2, ... ]".
-//      * An empty list is represented as "[]".
-//      *
-//      * @return the string representation of the list
-//      */
-//     public String toString() {
-//         if (size == 0) {
-//             return "[]";
-//         }
-//         StringBuilder sb = new StringBuilder("[ ");
-//         Node<E> current = head.next;
-//         while (current != head) {
-//             sb.append(current.value);
-//             if (current.next != head) {
-//                 sb.append(", ");
-//             }
-//             current = current.next;
-//         }
-//         sb.append(" ]");
-//         return sb.toString();
-//     }
-
     /**
      * Removes and returns the element at the specified position in the list.
      * Throws an IndexOutOfBoundsException if the position is invalid.

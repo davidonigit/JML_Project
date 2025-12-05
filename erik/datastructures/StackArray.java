@@ -213,22 +213,4 @@ public class StackArray<T> {
     public int size() {
         return top + 1;
     }
-
-//     /**
-//      * Returns a string representation of the stack.
-//      *
-//      * @return a string representation of the stack
-//      */
-//     public String toString() {
-//         StringBuilder sb = new StringBuilder();
-//         sb.append("StackArray [");
-//         for (int i = 0; i <= top; i++) {
-//             sb.append(stackArray[i]);
-//             if (i < top) {
-//                 sb.append(", ");
-//             }
-//         }
-//         sb.append("]");
-//         return sb.toString();
-//     }
 }
