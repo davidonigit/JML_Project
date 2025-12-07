@@ -1,4 +1,4 @@
-package com.thealgorithms.datastructures.stacks;
+package erik.datastructures;
 
 /**
  * Implements a generic stack using an array.
@@ -11,7 +11,7 @@ package com.thealgorithms.datastructures.stacks;
  *
  * @param <T> the type of elements in this stack
  */
-public class StackArray<T> {
+public class StackArray<T> implements Stack<T> {
 
     //@ public invariant 0 <= maxSize && maxSize <= Integer.MAX_VALUE;
     //@ public invariant stackArray.length == maxSize;
@@ -32,8 +32,7 @@ public class StackArray<T> {
      * Creates a stack with a default capacity.
      */
 
-    /*@ public normal_behavior
-      @ requires 0 <= DEFAULT_CAPACITY && DEFAULT_CAPACITY <= Integer.MAX_VALUE;
+    /*@ requires 0 <= DEFAULT_CAPACITY && DEFAULT_CAPACITY <= Integer.MAX_VALUE;
       @*/
     @SuppressWarnings("unchecked")
     public StackArray() {
@@ -47,10 +46,9 @@ public class StackArray<T> {
      * @throws IllegalArgumentException if size is less than or equal to 0
      */
 
-    /*@ public normal_behavior
-      @     requires size > 0;
-      @     ensures stackArray.length == size;
-      @     ensures top == -1;
+  /*  @ requires size > 0;
+      @ ensures stackArray.length == size;
+      @ ensures top == -1;
       @ also
       @ public exceptional_behavior
       @     requires size <= 0;
@@ -71,13 +69,16 @@ public class StackArray<T> {
      *
      * @param value the element to push
      */
-    /*@ public normal_behavior
+
+    /*@ also
+      @ public normal_behavior
       @   requires !isFull();
       @   requires value != null;
       @   requires \typeof(value) == \elemtype(stackArray);
       @   ensures stackArray[top] == value;
       @   ensures top == \old(top) + 1;
     @*/
+    @Override
     public void push(T value) {
         if (isFull()) {
             resize(maxSize * 2);
@@ -94,7 +95,8 @@ public class StackArray<T> {
      */
 
     
-    /*@ public normal_behavior
+    /*@ also
+      @ public normal_behavior
       @   requires !isEmpty();
       @   ensures \result == \old(stackArray[top]);
       @ also
@@ -102,6 +104,7 @@ public class StackArray<T> {
       @   requires isEmpty();
       @   signals (IllegalStateException e) true;
     @*/
+    @Override
     public T pop() {
         if (isEmpty()) {
             throw new IllegalStateException("Stack is empty, cannot pop element");
@@ -120,7 +123,8 @@ public class StackArray<T> {
      * @throws IllegalStateException if the stack is empty
      */
 
-    /*@ public normal_behavior
+    /*@ also
+      @ public normal_behavior
       @   requires !isEmpty();
       @   ensures \result == stackArray[top];
       @ also
@@ -128,6 +132,7 @@ public class StackArray<T> {
       @   requires isEmpty();
       @   signals (IllegalStateException e) true;
     @*/
+    @Override
     public T peek() {
         if (isEmpty()) {
             throw new IllegalStateException("Stack is empty, cannot peek element");
@@ -180,10 +185,12 @@ public class StackArray<T> {
      * @return true if the stack is empty, false otherwise
      */
 
-    /*@ public normal_behavior
+    /*@ also
+      @ public normal_behavior
       @   ensures \result == (top == -1);
       @ pure
     @*/
+    @Override
     public boolean isEmpty() {
         return top == -1;
     }
@@ -193,9 +200,11 @@ public class StackArray<T> {
      * overwritten on subsequent pushes.
      */
 
-    /*@ public normal_behavior
+    /*@ also
+      @ public normal_behavior
       @   ensures top == -1;
     @*/
+    @Override
     public void makeEmpty() {
         top = -1;
     }
@@ -206,10 +215,12 @@ public class StackArray<T> {
      * @return the size of the stack
      */
 
-    /*@ public normal_behavior
+    /*@ also
+      @ public normal_behavior
       @   ensures \result == top + 1;
       @ pure
     @*/
+    @Override
     public int size() {
         return top + 1;
     }
